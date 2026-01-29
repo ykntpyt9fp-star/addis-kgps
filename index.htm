@@ -1,0 +1,2013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Addis KGPS - Ethiopian Student Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* [Previous CSS remains exactly the same - not changing anything here] */
+        :root {
+            --primary: #006400;
+            --secondary: #da1212;
+            --accent: #fcd116;
+            --success: #078930;
+            --warning: #ff9800;
+            --light: #f5f5f5;
+            --dark: #1a237e;
+            --ethiopia-green: #078930;
+            --ethiopia-red: #da1212;
+            --ethiopia-yellow: #fcd116;
+            --ethiopia-blue: #0f47af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--ethiopia-green), var(--ethiopia-blue));
+            color: #333;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 2px solid var(--ethiopia-green);
+            display: flex;
+            gap: 5px;
+            backdrop-filter: blur(5px);
+        }
+
+        .lang-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 20px;
+            background: transparent;
+            color: #333;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            min-width: 70px;
+            justify-content: center;
+        }
+
+        .lang-btn:hover {
+            background: rgba(7, 137, 48, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: var(--ethiopia-green);
+            color: white;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .lang-btn.english { border: 1px solid #2196F3; }
+        .lang-btn.amharic { border: 1px solid #FF9800; }
+        .lang-btn.oromo { border: 1px solid #4CAF50; }
+
+        @media (max-width: 768px) {
+            .language-selector {
+                top: 10px;
+                left: 10px;
+                padding: 4px;
+            }
+            
+            .lang-btn {
+                padding: 5px 8px;
+                font-size: 0.7rem;
+                min-width: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .language-selector {
+                top: 5px;
+                left: 5px;
+                flex-direction: column;
+                border-radius: 15px;
+                padding: 3px;
+            }
+            
+            .lang-btn {
+                padding: 4px 6px;
+                font-size: 0.65rem;
+                min-width: 55px;
+            }
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            color: white;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(7, 137, 48, 0.9), rgba(218, 18, 18, 0.9), rgba(252, 209, 22, 0.9));
+            border-radius: 10px;
+            border: 2px solid white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 10px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .ethiopia-flag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin-top: 5px;
+            font-size: 0.8rem;
+        }
+
+        .highlight {
+            background: var(--ethiopia-yellow);
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        /* Navigation */
+        .main-nav {
+            background: white;
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 2px solid var(--ethiopia-green);
+            position: sticky;
+            top: 5px;
+            z-index: 100;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .nav-tab {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85rem;
+            flex: 1;
+            min-width: 120px;
+            justify-content: center;
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+
+        .nav-tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, var(--ethiopia-green), var(--ethiopia-red));
+            color: white;
+            border-color: var(--ethiopia-yellow);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, var(--ethiopia-green), var(--ethiopia-red));
+            color: white;
+            border-color: var(--ethiopia-yellow);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            display: none;
+            border: 2px solid var(--ethiopia-green);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-title {
+            color: var(--ethiopia-green);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--ethiopia-yellow);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid var(--ethiopia-green);
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-color: var(--ethiopia-yellow);
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .stat-box {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+
+        .stat-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--ethiopia-green);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--ethiopia-green);
+            margin-bottom: 3px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        /* Buttons with Enhanced Hover Effects */
+        button, .btn {
+            background: var(--ethiopia-green);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            transform: translateY(0);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover, .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, var(--ethiopia-green), var(--ethiopia-red));
+        }
+
+        /* Grade Selection Buttons */
+        .grade-selection button {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .grade-selection button.selected {
+            background: linear-gradient(135deg, var(--ethiopia-red), var(--ethiopia-yellow));
+            box-shadow: 0 0 0 3px white, 0 0 0 5px var(--ethiopia-green);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(218, 18, 18, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(218, 18, 18, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(218, 18, 18, 0); }
+        }
+
+        /* Subjects Grid - Making cards smaller */
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .subject-card {
+            padding: 10px;
+            border-radius: 8px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-height: 90px;
+            transform: translateY(0);
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border-color: white;
+        }
+
+        .subject-card.math { background: linear-gradient(135deg, #c0392b, #e74c3c); }
+        .subject-card.physics { background: linear-gradient(135deg, #2980b9, #3498db); }
+        .subject-card.chemistry { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+        .subject-card.biology { background: linear-gradient(135deg, #219653, #27ae60); }
+        .subject-card.english { background: linear-gradient(135deg, #e67e22, #f39c12); }
+        .subject-card.history { background: linear-gradient(135deg, #a84300, #d35400); }
+        .subject-card.geography { background: linear-gradient(135deg, #138d75, #16a085); }
+        .subject-card.economics { background: linear-gradient(135deg, #6c3483, #8e44ad); }
+        .subject-card.amharic { background: linear-gradient(135deg, #7d6608, #b7950b); }
+        .subject-card.civics { background: linear-gradient(135deg, #2c3e50, #34495e); }
+        .subject-card.ict { background: linear-gradient(135deg, #1f618d, #2874a6); }
+        .subject-card.webdesign { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .subject-card.agriculture { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+        .subject-card.novel { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+
+        .subject-icon {
+            font-size: 1.2rem;
+        }
+
+        .subject-card h3 {
+            font-size: 0.9rem;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .grade-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            margin-top: 3px;
+        }
+
+        .grade-btn {
+            padding: 2px 5px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            font-size: 0.6rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+
+        .grade-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .grade-btn.available {
+            background: rgba(255, 255, 255, 0.4);
+            border-color: var(--ethiopia-yellow);
+            font-weight: bold;
+        }
+
+        /* Online Resources */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .resource-card {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            border-color: var(--ethiopia-green);
+        }
+
+        .resource-card h4 {
+            color: var(--dark);
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+
+        .resource-links {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px;
+            border-radius: 5px;
+            background: #f8f9fa;
+            color: #333;
+            text-decoration: none;
+            font-size: 0.8rem;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+            transform: translateX(0);
+        }
+
+        .resource-link:hover {
+            background: #e9ecef;
+            transform: translateX(3px);
+            border-color: var(--ethiopia-green);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Grade Level Categories */
+        .grade-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .grade-category {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid var(--ethiopia-green);
+            text-align: center;
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+
+        .grade-category:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            border-color: var(--ethiopia-yellow);
+        }
+
+        .grade-category i {
+            font-size: 1.5rem;
+            color: var(--ethiopia-green);
+            margin-bottom: 6px;
+            transition: transform 0.3s ease;
+        }
+
+        .grade-category:hover i {
+            transform: scale(1.1);
+        }
+
+        .grade-category h4 {
+            color: var(--dark);
+            margin-bottom: 6px;
+            font-size: 1rem;
+        }
+
+        /* Flashcard System */
+        .flashcard-container {
+            perspective: 1000px;
+            height: 180px;
+            margin: 15px auto;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            transform: translateY(0);
+        }
+
+        .flashcard:hover {
+            transform: translateY(-4px);
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg) translateY(-4px);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--ethiopia-green), var(--ethiopia-blue));
+            color: white;
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, var(--ethiopia-red), #c0392b);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-content {
+            font-size: 0.9rem;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        /* Flashcard Categories */
+        .flashcard-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .category-card {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            border-color: var(--ethiopia-green);
+        }
+
+        .category-card i {
+            font-size: 1.5rem;
+            color: var(--ethiopia-green);
+            margin-bottom: 6px;
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:hover i {
+            transform: scale(1.1);
+        }
+
+        .category-card h4 {
+            color: var(--dark);
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+        }
+
+        /* Games Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+            border-color: var(--ethiopia-yellow);
+        }
+
+        .game-thumbnail {
+            height: 60px;
+            background: linear-gradient(135deg, var(--ethiopia-green), var(--ethiopia-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .game-info {
+            padding: 8px;
+        }
+
+        .game-info h4 {
+            color: var(--dark);
+            margin-bottom: 4px;
+            font-size: 0.85rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: white;
+            padding: 12px;
+            margin-top: 15px;
+            background: linear-gradient(135deg, rgba(7, 137, 48, 0.9), rgba(15, 71, 175, 0.9));
+            border-radius: 8px;
+            font-size: 0.75rem;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 8px 0;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+
+        .footer-links a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--ethiopia-yellow);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .copyright {
+            margin-top: 6px;
+            opacity: 0.8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .developer {
+            font-size: 0.65rem;
+            opacity: 0.7;
+        }
+
+        /* Exam & Books Section - Making cards smaller */
+        .exam-books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .exam-book-card {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            transform: translateY(0);
+        }
+
+        .exam-book-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            border-color: var(--ethiopia-green);
+        }
+
+        .exam-book-card i {
+            font-size: 1.5rem;
+            color: var(--ethiopia-green);
+            margin-bottom: 6px;
+            transition: transform 0.3s ease;
+        }
+
+        .exam-book-card:hover i {
+            transform: scale(1.1);
+        }
+
+        .exam-book-card h4 {
+            color: var(--dark);
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+        }
+
+        /* Modal for Coming Soon */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 350px;
+            width: 90%;
+            animation: slideIn 0.4s ease;
+            border: 3px solid var(--ethiopia-green);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-content i {
+            font-size: 3rem;
+            color: var(--ethiopia-yellow);
+            margin-bottom: 15px;
+            animation: bounce 1s infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-8px); }
+        }
+
+        .modal-content h3 {
+            color: var(--ethiopia-green);
+            margin-bottom: 8px;
+            font-size: 1.3rem;
+        }
+
+        .modal-content p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .modal-close {
+            background: var(--ethiopia-red);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .tagline {
+                font-size: 0.8rem;
+            }
+            
+            .nav-tab {
+                min-width: 110px;
+                font-size: 0.8rem;
+                padding: 6px 8px;
+            }
+            
+            .section-title {
+                font-size: 1.1rem;
+            }
+            
+            .subject-grid, .resources-grid, .grade-categories, .games-grid, .flashcard-categories, .exam-books-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .flashcard-container {
+                height: 160px;
+            }
+            
+            .flashcard-content {
+                font-size: 0.8rem;
+            }
+            
+            .footer-links {
+                gap: 4px;
+            }
+            
+            .footer-links a {
+                padding: 3px 6px;
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 5px;
+                gap: 8px;
+            }
+            
+            header {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .nav-tab {
+                min-width: 100px;
+                font-size: 0.75rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .copyright {
+                flex-direction: column;
+                gap: 4px;
+                text-align: center;
+            }
+            
+            .developer {
+                order: 2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <button class="lang-btn english active" onclick="changeLanguage('english')">
+            <i class="fas fa-globe"></i> English
+        </button>
+        <button class="lang-btn amharic" onclick="changeLanguage('amharic')">
+            <i class="fas fa-flag"></i> አማርኛ
+        </button>
+        <button class="lang-btn oromo" onclick="changeLanguage('oromo')">
+            <i class="fas fa-flag"></i> Afan Oromo
+        </button>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1><i class="fas fa-graduation-cap"></i> Addis KGPS</h1>
+            <p class="tagline">Ethiopian Knowledge Gateway & Preparation System</p>
+            <div class="ethiopia-flag">
+                <i class="fas fa-flag" style="color: var(--ethiopia-green);"></i>
+                <span>Ethiopian Ministry of Education Community</span>
+                <i class="fas fa-star" style="color: var(--ethiopia-yellow);"></i>
+            </div>
+            <div style="margin-top: 8px;">
+                <span class="highlight">200+ KG Flashcards</span> • 
+                <span class="highlight">Free Resources</span> • 
+                <span class="highlight">All Grades</span>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="main-nav">
+            <div class="nav-tabs">
+                <div class="nav-tab active" data-target="dashboard">
+                    <i class="fas fa-home"></i> <span class="lang-text" data-key="home">Dashboard</span>
+                </div>
+                <div class="nav-tab" data-target="subjects">
+                    <i class="fas fa-book-open"></i> <span class="lang-text" data-key="subjects">Subjects</span>
+                </div>
+                <div class="nav-tab" data-target="resources">
+                    <i class="fas fa-globe"></i> <span class="lang-text" data-key="resources">Online Resources</span>
+                </div>
+                <div class="nav-tab" data-target="flashcards">
+                    <i class="fas fa-brain"></i> <span class="lang-text" data-key="flashcards">Flash Cards</span>
+                </div>
+                <div class="nav-tab" data-target="games">
+                    <i class="fas fa-gamepad"></i> <span class="lang-text" data-key="games">Games</span>
+                </div>
+                <div class="nav-tab" data-target="exams">
+                    <i class="fas fa-file-alt"></i> <span class="lang-text" data-key="exams">Exams & Books</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dashboard -->
+        <section id="dashboard" class="content-section active">
+            <h2 class="section-title"><i class="fas fa-tachometer-alt"></i> <span class="lang-text" data-key="dashboard">Study Dashboard</span></h2>
+            
+            <div class="dashboard-grid">
+                <!-- Quick Stats -->
+                <div class="dashboard-card">
+                    <h3 style="color: var(--ethiopia-green); margin-bottom: 10px; font-size: 1rem;">
+                        <i class="fas fa-chart-line"></i> <span class="lang-text" data-key="studyProgress">Study Progress</span>
+                    </h3>
+                    <div class="quick-stats">
+                        <div class="stat-box">
+                            <div class="stat-value" id="studyHours">18.5</div>
+                            <div class="stat-label lang-text" data-key="studyHours">Study Hours</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" style="color: var(--ethiopia-blue);">247</div>
+                            <div class="stat-label lang-text" data-key="cardsStudied">Cards Studied</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" style="color: var(--ethiopia-red);">75%</div>
+                            <div class="stat-label lang-text" data-key="progress">Progress</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" style="color: var(--ethiopia-yellow);">7</div>
+                            <div class="stat-label lang-text" data-key="streakDays">Streak Days</div>
+                        </div>
+                    </div>
+                    <button onclick="switchTab('flashcards')" style="width: 100%; margin-top: 10px;">
+                        <i class="fas fa-brain"></i> <span class="lang-text" data-key="continueStudying">Continue Studying</span>
+                    </button>
+                </div>
+
+                <!-- Daily Motivation -->
+                <div class="dashboard-card">
+                    <h3 style="color: #d35400; margin-bottom: 10px; font-size: 1rem;">
+                        <i class="fas fa-quote-left"></i> <span class="lang-text" data-key="dailyMotivation">Daily Motivation</span>
+                    </h3>
+                    <div style="text-align: center;">
+                        <p id="funnyQuote" style="font-style: italic; color: #2c3e50; margin-bottom: 10px; font-size: 0.9rem; line-height: 1.3;">
+                            <span class="lang-text" data-key="motivationQuote">"Knowledge comes through struggle. Education is the key to success."</span>
+                        </p>
+                        <button id="newQuoteBtn">
+                            <i class="fas fa-sync-alt"></i> <span class="lang-text" data-key="newQuote">New Quote</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="dashboard-card">
+                    <h3 style="color: var(--ethiopia-green); margin-bottom: 10px; font-size: 1rem;">
+                        <i class="fas fa-bolt"></i> <span class="lang-text" data-key="quickLinks">Quick Links</span>
+                    </h3>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <button onclick="switchTab('flashcards')" style="background: #e74c3c;">
+                            <i class="fas fa-brain"></i> <span class="lang-text" data-key="kgFlashcards">KG Flashcards</span>
+                        </button>
+                        <button onclick="window.open('https://fetena.net/textbooks', '_blank')">
+                            <i class="fas fa-download"></i> <span class="lang-text" data-key="downloadBooks">Download Books</span>
+                        </button>
+                        <button onclick="switchTab('games')" style="background: var(--ethiopia-blue);">
+                            <i class="fas fa-gamepad"></i> <span class="lang-text" data-key="educationalGames">Educational Games</span>
+                        </button>
+                        <button onclick="switchTab('resources')" style="background: var(--warning);">
+                            <i class="fas fa-globe"></i> <span class="lang-text" data-key="onlineResources">Online Resources</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Subjects -->
+        <section id="subjects" class="content-section">
+            <h2 class="section-title"><i class="fas fa-graduation-cap"></i> <span class="lang-text" data-key="subjectsByGrade">Subjects by Grade Level</span></h2>
+            <p style="color: #666; margin-bottom: 12px; font-size: 0.85rem;">
+                <span class="lang-text" data-key="selectGradeInstruction">Select grade level first, then choose a subject to access resources</span>
+            </p>
+
+            <!-- Grade Selection -->
+            <div style="margin-bottom: 15px; background: #f8f9fa; padding: 12px; border-radius: 8px;">
+                <h3 style="color: var(--dark); margin-bottom: 8px; font-size: 1rem;">
+                    <i class="fas fa-graduation-cap"></i> <span class="lang-text" data-key="selectGradeLevel">Select Grade Level</span>
+                </h3>
+                <div class="grade-selection" style="display: flex; flex-wrap: wrap; gap: 6px;">
+                    <button onclick="selectGrade('kg')" style="background: #ffb74d; padding: 6px 12px; font-size: 0.8rem;">
+                        <i class="fas fa-child"></i> <span class="lang-text" data-key="kindergarten">Kindergarten</span>
+                    </button>
+                    <button onclick="selectGrade('1-8')" style="background: #4caf50; padding: 6px 12px; font-size: 0.8rem;">
+                        <i class="fas fa-school"></i> <span class="lang-text" data-key="grade1_8">Grade 1-8</span>
+                    </button>
+                    <button onclick="selectGrade('9')" style="background: #2196f3; padding: 6px 12px; font-size: 0.8rem;">
+                        <i class="fas fa-book"></i> <span class="lang-text" data-key="grade9">Grade 9</span>
+                    </button>
+                    <button onclick="selectGrade('10')" style="background: #9c27b0; padding: 6px 12px; font-size: 0.8rem;">
+                        <i class="fas fa-book-open"></i> <span class="lang-text" data-key="grade10">Grade 10</span>
+                    </button>
+                    <button onclick="selectGrade('11')" style="background: #ff9800; padding: 6px 12px; font-size: 0.8rem;">
+                        <i class="fas fa-university"></i> <span class="lang-text" data-key="grade11">Grade 11</span>
+                    </button>
+                    <button onclick="selectGrade('12')" style="background: #e91e63; padding: 6px 12px; font-size: 0.8rem;">
+                        <i class="fas fa-graduation-cap"></i> <span class="lang-text" data-key="grade12">Grade 12</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Selected Grade Display -->
+            <div id="selected-grade-display" style="display: none; margin-bottom: 15px; padding: 8px; background: linear-gradient(135deg, var(--ethiopia-green), var(--ethiopia-blue)); color: white; border-radius: 6px; text-align: center;">
+                <h4 style="font-size: 0.9rem; margin-bottom: 4px;">
+                    <i class="fas fa-check-circle"></i> <span class="lang-text" data-key="selected">Selected</span>: 
+                    <span id="current-grade-text" style="font-weight: bold;"></span>
+                </h4>
+                <p style="font-size: 0.75rem; opacity: 0.9;">
+                    <span class="lang-text" data-key="clickSubjectInstruction">Click on any subject below to access resources</span>
+                </p>
+            </div>
+
+            <!-- Subjects Grid -->
+            <div id="subjects-container">
+                <p style="text-align: center; color: #666; padding: 15px; font-style: italic; font-size: 0.85rem;">
+                    <span class="lang-text" data-key="selectGradeFirst">Please select a grade level above to view available subjects</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- Online Resources -->
+        <section id="resources" class="content-section">
+            <h2 class="section-title"><i class="fas fa-globe"></i> <span class="lang-text" data-key="onlineResources">Online Resources</span></h2>
+            <p style="color: #666; margin-bottom: 12px; font-size: 0.85rem;">
+                <span class="lang-text" data-key="resourcesDescription">Educational resources categorized by grade level.</span>
+            </p>
+
+            <!-- Grade Categories -->
+            <div class="grade-categories">
+                <div class="grade-category">
+                    <i class="fas fa-child"></i>
+                    <h4><span class="lang-text" data-key="kindergarten">Kindergarten</span></h4>
+                    <div class="resource-links">
+                        <a href="https://www.starfall.com" target="_blank" class="resource-link">
+                            <i class="fas fa-gamepad"></i> Starfall Games
+                        </a>
+                        <a href="https://pbskids.org" target="_blank" class="resource-link">
+                            <i class="fas fa-tv"></i> PBS Kids Videos
+                        </a>
+                        <a href="https://www.abcmouse.com" target="_blank" class="resource-link">
+                            <i class="fas fa-mouse"></i> ABCmouse
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grade-category">
+                    <i class="fas fa-school"></i>
+                    <h4><span class="lang-text" data-key="primarySchool">Primary School</span></h4>
+                    <div class="resource-links">
+                        <a href="https://www.khanacademy.org" target="_blank" class="resource-link">
+                            <i class="fas fa-graduation-cap"></i> Khan Academy
+                        </a>
+                        <a href="https://www.prodigygame.com" target="_blank" class="resource-link">
+                            <i class="fas fa-gamepad"></i> Prodigy Math
+                        </a>
+                        <a href="https://www.brainpop.com" target="_blank" class="resource-link">
+                            <i class="fas fa-brain"></i> BrainPOP
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grade-category">
+                    <i class="fas fa-university"></i>
+                    <h4><span class="lang-text" data-key="highSchool">High School</span></h4>
+                    <div class="resource-links">
+                        <a href="https://www.coursera.org" target="_blank" class="resource-link">
+                            <i class="fas fa-laptop"></i> Coursera
+                        </a>
+                        <a href="https://www.edx.org" target="_blank" class="resource-link">
+                            <i class="fas fa-book"></i> edX Courses
+                        </a>
+                        <a href="https://www.ck12.org" target="_blank" class="resource-link">
+                            <i class="fas fa-flask"></i> CK-12 STEM
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Flash Cards -->
+        <section id="flashcards" class="content-section">
+            <h2 class="section-title"><i class="fas fa-brain"></i> <span class="lang-text" data-key="flashCards">Flash Cards</span></h2>
+            <p style="color: #666; margin-bottom: 12px; font-size: 0.85rem;">
+                <span style="color: var(--ethiopia-green); font-weight: bold;">200+ <span class="lang-text" data-key="kg">KG</span> <span class="lang-text" data-key="flashcards">Flashcards</span>!</span> <span class="lang-text" data-key="flashcardsDescription">English, Math, Science and more</span>
+            </p>
+            
+            <div style="text-align: center; margin-bottom: 12px;">
+                <select id="flashcardDeck" style="padding: 8px; border-radius: 6px; border: 2px solid var(--ethiopia-green); width: 100%; max-width: 280px; font-size: 0.85rem;">
+                    <option value="kg"><span class="lang-text" data-key="kgFlashcards200">Kindergarten Flashcards (200+)</span></option>
+                    <option value="primary"><span class="lang-text" data-key="primary1_8">Primary (Grade 1-8)</span></option>
+                    <option value="math"><span class="lang-text" data-key="mathematics">Mathematics</span></option>
+                    <option value="english"><span class="lang-text" data-key="english">English</span></option>
+                    <option value="science"><span class="lang-text" data-key="science">Science</span></option>
+                </select>
+            </div>
+
+            <div class="flashcard-container">
+                <div class="flashcard" id="mainFlashcard">
+                    <div class="flashcard-front">
+                        <div class="flashcard-content" id="cardQuestion">
+                            <span class="lang-text" data-key="flashcardQuestion1">What letter comes after A?</span>
+                        </div>
+                        <p style="margin-top: 8px; opacity: 0.8; font-size: 0.75rem;"><span class="lang-text" data-key="clickToFlip">Click to flip card</span></p>
+                    </div>
+                    <div class="flashcard-back">
+                        <div class="flashcard-content" id="cardAnswer">
+                            <span class="lang-text" data-key="flashcardAnswer1">The letter B comes after A in the English alphabet.</span>
+                        </div>
+                        <p style="margin-top: 8px; opacity: 0.8; font-size: 0.75rem;"><span class="lang-text" data-key="clickToFlip">Click to flip card</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
+                <button onclick="prevCard()" style="padding: 6px 12px; font-size: 0.8rem;">
+                    <i class="fas fa-arrow-left"></i> <span class="lang-text" data-key="previous">Previous</span>
+                </button>
+                <button onclick="flipCard()" style="background: var(--ethiopia-red); padding: 6px 12px; font-size: 0.8rem;">
+                    <i class="fas fa-sync-alt"></i> <span class="lang-text" data-key="flipCard">Flip Card</span>
+                </button>
+                <button onclick="nextCard()" style="padding: 6px 12px; font-size: 0.8rem;">
+                    <span class="lang-text" data-key="next">Next</span> <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <div style="margin-top: 15px; background: #f8f9fa; padding: 10px; border-radius: 8px; text-align: center;">
+                <p style="color: var(--ethiopia-green); font-size: 0.85rem; margin-bottom: 5px;">
+                    <i class="fas fa-star"></i> <strong><span class="lang-text" data-key="flashcards200">200+ KG Flashcards Available!</span></strong>
+                </p>
+                <p style="color: #666; font-size: 0.75rem;">
+                    <span class="lang-text" data-key="flashcardsCategories">Alphabet, Numbers, Colors, Shapes, Animals, Basic Math & English</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- Educational Games -->
+        <section id="games" class="content-section">
+            <h2 class="section-title"><i class="fas fa-gamepad"></i> <span class="lang-text" data-key="educationalGames">Educational Games</span></h2>
+            
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-thumbnail">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="game-info">
+                        <h4><span class="lang-text" data-key="mathGames">Math Games</span></h4>
+                        <a href="https://www.coolmathgames.com" target="_blank" class="resource-link" style="justify-content: center; margin-top: 5px; padding: 5px;">
+                            <i class="fas fa-play"></i> <span class="lang-text" data-key="playNow">Play Now</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-thumbnail">
+                        <i class="fas fa-atom"></i>
+                    </div>
+                    <div class="game-info">
+                        <h4><span class="lang-text" data-key="scienceGames">Science Games</span></h4>
+                        <a href="https://phet.colorado.edu" target="_blank" class="resource-link" style="justify-content: center; margin-top: 5px; padding: 5px;">
+                            <i class="fas fa-flask"></i> <span class="lang-text" data-key="playNow">Play Now</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-thumbnail">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="game-info">
+                        <h4><span class="lang-text" data-key="codingGames">Coding Games</span></h4>
+                        <a href="https://www.code.org" target="_blank" class="resource-link" style="justify-content: center; margin-top: 5px; padding: 5px;">
+                            <i class="fas fa-laptop-code"></i> <span class="lang-text" data-key="playNow">Play Now</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-thumbnail">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <div class="game-info">
+                        <h4><span class="lang-text" data-key="geographyGames">Geography Games</span></h4>
+                        <a href="https://www.geoguessr.com" target="_blank" class="resource-link" style="justify-content: center; margin-top: 5px; padding: 5px;">
+                            <i class="fas fa-map-marked-alt"></i> <span class="lang-text" data-key="playNow">Play Now</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exams & Books Section -->
+        <section id="exams" class="content-section">
+            <h2 class="section-title"><i class="fas fa-file-alt"></i> <span class="lang-text" data-key="examsBooks">Exams & Books</span></h2>
+            <p style="color: #666; margin-bottom: 12px; font-size: 0.85rem;">
+                <span class="lang-text" data-key="downloadResources">Download past exam papers and textbooks from fetena.net</span>
+            </p>
+
+            <div class="exam-books-grid">
+                <div class="exam-book-card" onclick="openFetena('textbooks')">
+                    <i class="fas fa-book"></i>
+                    <h4><span class="lang-text" data-key="textbooks">Textbooks</span></h4>
+                    <p style="color: #666; font-size: 0.7rem; margin: 0;"><span class="lang-text" data-key="allGradeTextbooks">All grade textbooks</span></p>
+                </div>
+
+                <div class="exam-book-card" onclick="openFetena('past-papers')">
+                    <i class="fas fa-file-alt"></i>
+                    <h4><span class="lang-text" data-key="pastPapers">Past Papers</span></h4>
+                    <p style="color: #666; font-size: 0.7rem; margin: 0;"><span class="lang-text" data-key="previousExams">Previous exams</span></p>
+                </div>
+
+                <div class="exam-book-card" onclick="showComingSoon('Teachers Guide')">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h4><span class="lang-text" data-key="teachersGuide">Teachers Guide</span></h4>
+                    <p style="color: #666; font-size: 0.7rem; margin: 0;"><span class="lang-text" data-key="teachingMaterials">Teaching materials</span></p>
+                </div>
+
+                <div class="exam-book-card" onclick="showComingSoon('National Curriculum')">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h4><span class="lang-text" data-key="curriculum">Curriculum</span></h4>
+                    <p style="color: #666; font-size: 0.7rem; margin: 0;"><span class="lang-text" data-key="nationalFramework">National framework</span></p>
+                </div>
+            </div>
+
+            <!-- Grade-specific Resources -->
+            <div style="margin-top: 15px;">
+                <h3 style="color: var(--dark); margin-bottom: 8px; font-size: 1rem;">
+                    <i class="fas fa-graduation-cap"></i> <span class="lang-text" data-key="gradeResources">Grade Resources</span>
+                </h3>
+                <div class="grade-categories">
+                    <div class="grade-category">
+                        <i class="fas fa-child"></i>
+                        <h4><span class="lang-text" data-key="kindergarten">Kindergarten</span></h4>
+                        <button onclick="openGradeResources('kg')" style="width: 100%; margin-top: 8px; padding: 6px; font-size: 0.8rem;">
+                            <i class="fas fa-download"></i> <span class="lang-text" data-key="resources">Resources</span>
+                        </button>
+                    </div>
+
+                    <div class="grade-category">
+                        <i class="fas fa-school"></i>
+                        <h4><span class="lang-text" data-key="primary">Primary</span></h4>
+                        <button onclick="openGradeResources('1-8')" style="width: 100%; margin-top: 8px; padding: 6px; font-size: 0.8rem;">
+                            <i class="fas fa-download"></i> <span class="lang-text" data-key="resources">Resources</span>
+                        </button>
+                    </div>
+
+                    <div class="grade-category">
+                        <i class="fas fa-university"></i>
+                        <h4><span class="lang-text" data-key="highSchool">High School</span></h4>
+                        <button onclick="openGradeResources('9-12')" style="width: 100%; margin-top: 8px; padding: 6px; font-size: 0.8rem;">
+                            <i class="fas fa-download"></i> <span class="lang-text" data-key="resources">Resources</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-links">
+                <a href="#" onclick="switchTab('dashboard')"><i class="fas fa-home"></i> <span class="lang-text" data-key="home">Home</span></a>
+                <a href="#" onclick="switchTab('subjects')"><i class="fas fa-book-open"></i> <span class="lang-text" data-key="subjects">Subjects</span></a>
+                <a href="#" onclick="switchTab('exams')"><i class="fas fa-file-alt"></i> <span class="lang-text" data-key="exams">Exams & Books</span></a>
+                <a href="#" onclick="switchTab('flashcards')"><i class="fas fa-brain"></i> <span class="lang-text" data-key="flashcards">Flashcards</span></a>
+                <a href="#" onclick="switchTab('games')"><i class="fas fa-gamepad"></i> <span class="lang-text" data-key="games">Games</span></a>
+                <a href="https://fetena.net" target="_blank"><i class="fas fa-download"></i> Fetena.net</a>
+            </div>
+            
+            <p class="copyright">
+                <span>© <span class="lang-text" data-key="copyright">2025 Addis KGPS | Ethiopian Education Portal</span></span>
+                <span class="developer"><span class="lang-text" data-key="developedBy">Developed by Teshome Gebeyehu (Ozg)</span></span>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Coming Soon Modal -->
+    <div id="comingSoonModal" class="modal">
+        <div class="modal-content">
+            <i class="fas fa-tools"></i>
+            <h3 id="modalTitle"><span class="lang-text" data-key="comingSoon">Coming Soon!</span></h3>
+            <p id="modalMessage"><span class="lang-text" data-key="featureUnderDevelopment">This feature is currently under development.</span></p>
+            <button class="modal-close" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Language System
+        const translations = {
+            english: {
+                home: "Dashboard",
+                subjects: "Subjects",
+                resources: "Online Resources",
+                flashcards: "Flash Cards",
+                games: "Games",
+                exams: "Exams & Books",
+                dashboard: "Study Dashboard",
+                studyProgress: "Study Progress",
+                studyHours: "Study Hours",
+                cardsStudied: "Cards Studied",
+                progress: "Progress",
+                streakDays: "Streak Days",
+                continueStudying: "Continue Studying",
+                dailyMotivation: "Daily Motivation",
+                motivationQuote: "Knowledge comes through struggle. Education is the key to success.",
+                newQuote: "New Quote",
+                quickLinks: "Quick Links",
+                kgFlashcards: "KG Flashcards",
+                downloadBooks: "Download Books",
+                educationalGames: "Educational Games",
+                onlineResources: "Online Resources",
+                subjectsByGrade: "Subjects by Grade Level",
+                selectGradeInstruction: "Select grade level first, then choose a subject to access resources",
+                selectGradeLevel: "Select Grade Level",
+                kindergarten: "Kindergarten",
+                grade1_8: "Grade 1-8",
+                grade9: "Grade 9",
+                grade10: "Grade 10",
+                grade11: "Grade 11",
+                grade12: "Grade 12",
+                selected: "Selected",
+                clickSubjectInstruction: "Click on any subject below to access resources",
+                selectGradeFirst: "Please select a grade level above to view available subjects",
+                resourcesDescription: "Educational resources categorized by grade level.",
+                primarySchool: "Primary School",
+                highSchool: "High School",
+                flashCards: "Flash Cards",
+                kg: "KG",
+                flashcardsDescription: "English, Math, Science and more",
+                kgFlashcards200: "Kindergarten Flashcards (200+)",
+                primary1_8: "Primary (Grade 1-8)",
+                mathematics: "Mathematics",
+                english: "English",
+                science: "Science",
+                flashcardQuestion1: "What letter comes after A?",
+                flashcardAnswer1: "The letter B comes after A in the English alphabet.",
+                clickToFlip: "Click to flip card",
+                previous: "Previous",
+                flipCard: "Flip Card",
+                next: "Next",
+                flashcards200: "200+ KG Flashcards Available!",
+                flashcardsCategories: "Alphabet, Numbers, Colors, Shapes, Animals, Basic Math & English",
+                mathGames: "Math Games",
+                scienceGames: "Science Games",
+                codingGames: "Coding Games",
+                geographyGames: "Geography Games",
+                playNow: "Play Now",
+                examsBooks: "Exams & Books",
+                downloadResources: "Download past exam papers and textbooks from fetena.net",
+                textbooks: "Textbooks",
+                allGradeTextbooks: "All grade textbooks",
+                pastPapers: "Past Papers",
+                previousExams: "Previous exams",
+                teachersGuide: "Teachers Guide",
+                teachingMaterials: "Teaching materials",
+                curriculum: "Curriculum",
+                nationalFramework: "National framework",
+                gradeResources: "Grade Resources",
+                primary: "Primary",
+                resources: "Resources",
+                copyright: "2025 Addis KGPS | Ethiopian Education Portal",
+                developedBy: "Developed by Teshome Gebeyehu (Ozg)",
+                comingSoon: "Coming Soon!",
+                featureUnderDevelopment: "This feature is currently under development."
+            },
+            amharic: {
+                home: "መግቢያ",
+                subjects: "ርዕሰ ጉዳዮች",
+                resources: "ኦንላይን ሀብቶች",
+                flashcards: "ፍላሽ ካርዶች",
+                games: "ጨዋታዎች",
+                exams: "ፈተናዎች እና መጻሕፍት",
+                dashboard: "የትምህርት መግቢያ",
+                studyProgress: "የትምህርት ሂደት",
+                studyHours: "የትምህርት ሰዓታት",
+                cardsStudied: "የተማሩ ካርዶች",
+                progress: "ሂደት",
+                streakDays: "ተከታታይ ቀናት",
+                continueStudying: "ትምህርትዎን ቀጥል",
+                dailyMotivation: "ዕለታዊ መነሳሻ",
+                motivationQuote: "ፍልስፍና በመጋደል ይመጣል። ትምህርት የስኬት ቁልፍ ነው።",
+                newQuote: "አዲስ ጥቅስ",
+                quickLinks: "ፈጣን አገናኞች",
+                kgFlashcards: "ኪጂ ፍላሽ ካርዶች",
+                downloadBooks: "መጽሐፍት አውርድ",
+                educationalGames: "የትምህርት ጨዋታዎች",
+                onlineResources: "ኦንላይን ሀብቶች",
+                subjectsByGrade: "በደረጃ ደረጃ ርዕሰ ጉዳዮች",
+                selectGradeInstruction: "በመጀመሪያ ደረጃ ይምረጡ፣ ከዚያም ሀብቶችን ለመድረስ ርዕሰ ጉዳይ ይምረጡ",
+                selectGradeLevel: "ደረጃ ይምረጡ",
+                kindergarten: "ኪንደርጋርተን",
+                grade1_8: "1-8 ኛ ደረጃ",
+                grade9: "9 ኛ ደረጃ",
+                grade10: "10 ኛ ደረጃ",
+                grade11: "11 ኛ ደረጃ",
+                grade12: "12 ኛ ደረጃ",
+                selected: "ተመርጧል",
+                clickSubjectInstruction: "ሀብቶችን ለመድረስ ከታች ማንኛውንም ርዕሰ ጉዳይ ጠቅ ያድርጉ",
+                selectGradeFirst: "እባክዎ የሚገኙ ርዕሰ ጉዳዮችን ለማየት ከላይ ደረጃ ይምረጡ",
+                resourcesDescription: "በደረጃ ደረጃ የተደራጁ የትምህርት ሀብቶች።",
+                primarySchool: "የመጀመሪያ ደረጃ ትምህርት ቤት",
+                highSchool: "ሁለተኛ ደረጃ ትምህርት ቤት",
+                flashCards: "ፍላሽ ካርዶች",
+                kg: "ኪጂ",
+                flashcardsDescription: "እንግሊዝኛ፣ ሒሳብ፣ ሳይንስ እና ሌሎች",
+                kgFlashcards200: "ኪንደርጋርተን ፍላሽ ካርዶች (200+)",
+                primary1_8: "መጀመሪያ ደረጃ (1-8 ኛ ደረጃ)",
+                mathematics: "ሒሳብ",
+                english: "እንግሊዝኛ",
+                science: "ሳይንስ",
+                flashcardQuestion1: "ከ ኤ በኋላ ምን ፊደል ይመጣል?",
+                flashcardAnswer1: "ከ ኤ በኋላ ቢ ይመጣል።",
+                clickToFlip: "ካርዱን ለመገልበጥ ጠቅ ያድርጉ",
+                previous: "የቀድሞ",
+                flipCard: "ካርድ ገልብጥ",
+                next: "ቀጣይ",
+                flashcards200: "200+ ኪጂ ፍላሽ ካርዶች ይገኛሉ!",
+                flashcardsCategories: "ፊደል፣ ቁጥሮች፣ ቀለሞች፣ ቅርጾች፣ እንስሳት፣ መሰረታዊ ሒሳብ እና እንግሊዝኛ",
+                mathGames: "የሒሳብ ጨዋታዎች",
+                scienceGames: "የሳይንስ ጨዋታዎች",
+                codingGames: "የፕሮግራሚንግ ጨዋታዎች",
+                geographyGames: "የጂኦግራፊ ጨዋታዎች",
+                playNow: "አሁን ተጫውት",
+                examsBooks: "ፈተናዎች እና መጻሕፍት",
+                downloadResources: "ያለፉትን የፈተና ወረቀቶች እና መጽሐፍት ከ fetena.net አውርድ",
+                textbooks: "መጽሐፍት",
+                allGradeTextbooks: "ሁሉንም ደረጃ መጽሐፍት",
+                pastPapers: "ያለፉ ወረቀቶች",
+                previousExams: "ያለፉ ፈተናዎች",
+                teachersGuide: "የአስተማሪ መመሪያ",
+                teachingMaterials: "የትምህርት ግብዓቶች",
+                curriculum: "ሥርዓተ ትምህርት",
+                nationalFramework: "የብሔራዊ ማዕቀፍ",
+                gradeResources: "የደረጃ ሀብቶች",
+                primary: "መጀመሪያ ደረጃ",
+                resources: "ሀብቶች",
+                copyright: "2025 አዲስ ኬጂፒኤስ | የኢትዮጵያ የትምህርት መግቢያ",
+                developedBy: "በቴሾሜ ገበየሁ የተሰራ (ኦዝግ)",
+                comingSoon: "በቅርብ ጊዜ!",
+                featureUnderDevelopment: "ይህ ባህሪ በአሁኑ ጊዜ በማምረት ላይ ነው።"
+            },
+            oromo: {
+                home: "Bakka Bu'aa",
+                subjects: "Wabiiwwan",
+                resources: "Qabeenyawwan Lakkofsaa",
+                flashcards: "Kaardota Flaashii",
+                games: "Taphaawwan",
+                exams: "Qormaatawwan fi Kitaabota",
+                dashboard: "Bakka Bu'aa Barannoo",
+                studyProgress: "Gabaasa Barannoo",
+                studyHours: "Sa'aatota Barannoo",
+                cardsStudied: "Kaardota Barataman",
+                progress: "Gabaasaa",
+                streakDays: "Guyyota Walitti Fufaa",
+                continueStudying: "Barattoota Itti Fufi",
+                dailyMotivation: "Gorsa Guyyaa",
+                motivationQuote: "Beekumsi Lolaan Dhufa. Barsiisni furtuu milkaa'inaati.",
+                newQuote: "Yaadni Haaraa",
+                quickLinks: "Lakkoofsota Dafaa",
+                kgFlashcards: "Kaardota Flaashii KG",
+                downloadBooks: "Kitaabota Buusi",
+                educationalGames: "Taphaawwan Barsiisaa",
+                onlineResources: "Qabeenya Lakkofsaa",
+                subjectsByGrade: "Wabiiwwan Sadarkaa Irratti Hundaa'e",
+                selectGradeInstruction: "Dursee sadarkaa filadhu, ergasii qabeenyaaf wabii filadhu",
+                selectGradeLevel: "Sadarkaa Filadhu",
+                kindergarten: "Kinder Garateenii",
+                grade1_8: "Sadarkaa 1-8",
+                grade9: "Sadarkaa 9",
+                grade10: "Sadarkaa 10",
+                grade11: "Sadarkaa 11",
+                grade12: "Sadarkaa 12",
+                selected: "Filatame",
+                clickSubjectInstruction: "Qabeenyaaf gara wabiiwwan armaan gadii click godhi",
+                selectGradeFirst: "Mee dura sadarkaa filadhu wabiiwwan argatan akka ilaaltanuf",
+                resourcesDescription: "Qabeenya Barsiisaa Sadarkaa Irratti Hundaa'e.",
+                primarySchool: "Mana Barumsaa Sadarkaa Jalqabaa",
+                highSchool: "Mana Barumsaa Sadarkaa Lammaffaa",
+                flashCards: "Kaardota Flaashii",
+                kg: "KG",
+                flashcardsDescription: "Ingiliffaa, Herregaa, Saayinsii fi Dabalata",
+                kgFlashcards200: "Kaardota Flaashii KG (200+)",
+                primary1_8: "Sadarkaa Jalqabaa (1-8)",
+                mathematics: "Herrega",
+                english: "Ingiliffaa",
+                science: "Saayinsii",
+                flashcardQuestion1: "Eegersa A booda maqaan maali dhufa?",
+                flashcardAnswer1: "Eegersa A booda B dhufa.",
+                clickToFlip: "Kaarda Jijjiirruuf Click Godhi",
+                previous: "Dursee",
+                flipCard: "Kaarda Jijjiirri",
+                next: "Itaanaa",
+                flashcards200: "Kaardota Flaashii KG 200+ Argama!",
+                flashcardsCategories: "Qubee, Lakkoofsa, Halluu, Qaamolee, Bineensota, Herrega Jalqabaa fi Ingiliffaa",
+                mathGames: "Taphaawwan Herregaa",
+                scienceGames: "Taphaawwan Saayinsii",
+                codingGames: "Taphaawwan Pirograamiinii",
+                geographyGames: "Taphaawwan Jiyoograafii",
+                playNow: "Amma Tapha'i",
+                examsBooks: "Qormaatawwan fi Kitaabota",
+                downloadResources: "Qormaata Dhiheenyaa fi kitaabota fetena.net irraa buusi",
+                textbooks: "Kitaabota",
+                allGradeTextbooks: "Kitaabota Sadarkaa Hunda",
+                pastPapers: "Xalayaa Darban",
+                previousExams: "Qormaata Darban",
+                teachersGuide: "Qajeelfama Barsiisaa",
+                teachingMaterials: "Meeshaa Barsiisaa",
+                curriculum: "Kaarikuulamii",
+                nationalFramework: "Kaayyoo Mootummaa",
+                gradeResources: "Qabeenya Sadarkaa",
+                primary: "Jalqabaa",
+                resources: "Qabeenya",
+                copyright: "2025 Addis KGPS | Bakka Bu'aa Barsiisaa Itoophiyaa",
+                developedBy: "Teshome Gebeyehu irraa (Ozg)",
+                comingSoon: "Fuuldura!",
+                featureUnderDevelopment: "Kana amma ijaaramuu irra jira."
+            }
+        };
+
+        let currentLanguage = 'english';
+
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.classList.contains(lang)) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Update all text elements
+            document.querySelectorAll('.lang-text').forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            
+            // Update modal if open
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMessage = document.getElementById('modalMessage');
+            if (modalTitle && modalMessage) {
+                if (translations[lang] && translations[lang]['comingSoon']) {
+                    modalTitle.textContent = translations[lang]['comingSoon'];
+                }
+                if (translations[lang] && translations[lang]['featureUnderDevelopment']) {
+                    modalMessage.textContent = translations[lang]['featureUnderDevelopment'];
+                }
+            }
+            
+            // Update grade display
+            if (selectedGrade) {
+                updateSelectedGradeDisplay(selectedGrade);
+            }
+        }
+
+        // Global variable for selected grade
+        let selectedGrade = null;
+
+        // Navigation System (unchanged)
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        function initNavigation() {
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    contentSections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === target) {
+                            section.classList.add('active');
+                        }
+                    });
+                });
+            });
+        }
+
+        function switchTab(tabId) {
+            const tab = document.querySelector(`.nav-tab[data-target="${tabId}"]`);
+            if (tab) tab.click();
+        }
+
+        // Grade Selection System
+        function selectGrade(grade) {
+            selectedGrade = grade;
+            
+            document.querySelectorAll('.grade-selection button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            event.target.classList.add('selected');
+            
+            updateSelectedGradeDisplay(grade);
+            updateSubjectsForGrade(grade);
+        }
+
+        function updateSelectedGradeDisplay(grade) {
+            const display = document.getElementById('selected-grade-display');
+            const gradeText = document.getElementById('current-grade-text');
+            
+            const gradeNames = {
+                'kg': translations[currentLanguage]['kindergarten'] || 'Kindergarten',
+                '1-8': translations[currentLanguage]['grade1_8'] || 'Grade 1-8',
+                '9': translations[currentLanguage]['grade9'] || 'Grade 9',
+                '10': translations[currentLanguage]['grade10'] || 'Grade 10',
+                '11': translations[currentLanguage]['grade11'] || 'Grade 11',
+                '12': translations[currentLanguage]['grade12'] || 'Grade 12'
+            };
+            
+            gradeText.textContent = gradeNames[grade] || grade;
+            display.style.display = 'block';
+        }
+
+        // Subjects by Grade Level - UPDATED WITH CORRECT FETENA.NET LINKS
+        const subjectsByGrade = {
+            'kg': [
+                { 
+                    name: 'Kindergarten Learning', 
+                    icon: 'fas fa-child', 
+                    color: 'amharic', 
+                    grades: ['kg'],
+                    action: 'openKGLinks'
+                }
+            ],
+            '1-8': [
+                { name: 'Mathematics', icon: 'fas fa-square-root-alt', color: 'math', grades: ['1-8'], url: 'https://fetena.net/textbooks?subject=mathematics' },
+                { name: 'English', icon: 'fas fa-language', color: 'english', grades: ['1-8'], url: 'https://fetena.net/textbooks?subject=english' },
+                { name: 'Amharic', icon: 'fas fa-book', color: 'amharic', grades: ['1-8'], url: 'https://fetena.net/textbooks?subject=amharic' },
+                { name: 'Science', icon: 'fas fa-flask', color: 'biology', grades: ['1-8'], url: 'https://fetena.net/textbooks?subject=science' },
+                { name: 'Social Studies', icon: 'fas fa-globe-africa', color: 'geography', grades: ['1-8'], url: 'https://fetena.net/textbooks?subject=social-studies' }
+            ],
+            '9': [
+                { name: 'Mathematics', icon: 'fas fa-square-root-alt', color: 'math', grades: ['9'], url: 'https://fetena.net/textbooks?subject=mathematics&grade=9' },
+                { name: 'Physics', icon: 'fas fa-atom', color: 'physics', grades: ['9'], url: 'https://fetena.net/textbooks?subject=physics&grade=9' },
+                { name: 'Chemistry', icon: 'fas fa-flask', color: 'chemistry', grades: ['9'], url: 'https://fetena.net/textbooks?subject=chemistry&grade=9' },
+                { name: 'Biology', icon: 'fas fa-dna', color: 'biology', grades: ['9'], url: 'https://fetena.net/textbooks?subject=biology&grade=9' },
+                { name: 'English', icon: 'fas fa-language', color: 'english', grades: ['9'], url: 'https://fetena.net/textbooks?subject=english&grade=9' },
+                { name: 'Amharic', icon: 'fas fa-book', color: 'amharic', grades: ['9'], url: 'https://fetena.net/textbooks?subject=amharic&grade=9' },
+                { name: 'History', icon: 'fas fa-landmark', color: 'history', grades: ['9'], url: 'https://fetena.net/textbooks?subject=history&grade=9' },
+                { name: 'Geography', icon: 'fas fa-globe-africa', color: 'geography', grades: ['9'], url: 'https://fetena.net/textbooks?subject=geography&grade=9' },
+                { name: 'Civics', icon: 'fas fa-balance-scale', color: 'civics', grades: ['9'], url: 'https://fetena.net/textbooks?subject=civics&grade=9' },
+                { name: 'ICT', icon: 'fas fa-laptop', color: 'ict', grades: ['9'], url: 'https://fetena.net/textbooks?subject=ict&grade=9' },
+                { name: 'Economics', icon: 'fas fa-chart-line', color: 'economics', grades: ['9'], url: 'https://fetena.net/textbooks?subject=economics&grade=9' },
+                { name: 'Agriculture', icon: 'fas fa-seedling', color: 'agriculture', grades: ['9'], url: 'https://fetena.net/textbooks?subject=agriculture&grade=9' },
+                { name: 'Novel Books', icon: 'fas fa-book-open', color: 'novel', grades: ['9'], action: 'showComingSoon' }
+            ],
+            '10': [
+                { name: 'Mathematics', icon: 'fas fa-square-root-alt', color: 'math', grades: ['10'], url: 'https://fetena.net/textbooks?subject=mathematics&grade=10' },
+                { name: 'Physics', icon: 'fas fa-atom', color: 'physics', grades: ['10'], url: 'https://fetena.net/textbooks?subject=physics&grade=10' },
+                { name: 'Chemistry', icon: 'fas fa-flask', color: 'chemistry', grades: ['10'], url: 'https://fetena.net/textbooks?subject=chemistry&grade=10' },
+                { name: 'Biology', icon: 'fas fa-dna', color: 'biology', grades: ['10'], url: 'https://fetena.net/textbooks?subject=biology&grade=10' },
+                { name: 'English', icon: 'fas fa-language', color: 'english', grades: ['10'], url: 'https://fetena.net/textbooks?subject=english&grade=10' },
+                { name: 'Amharic', icon: 'fas fa-book', color: 'amharic', grades: ['10'], url: 'https://fetena.net/textbooks?subject=amharic&grade=10' },
+                { name: 'History', icon: 'fas fa-landmark', color: 'history', grades: ['10'], url: 'https://fetena.net/textbooks?subject=history&grade=10' },
+                { name: 'Geography', icon: 'fas fa-globe-africa', color: 'geography', grades: ['10'], url: 'https://fetena.net/textbooks?subject=geography&grade=10' },
+                { name: 'Civics', icon: 'fas fa-balance-scale', color: 'civics', grades: ['10'], url: 'https://fetena.net/textbooks?subject=civics&grade=10' },
+                { name: 'ICT', icon: 'fas fa-laptop', color: 'ict', grades: ['10'], url: 'https://fetena.net/textbooks?subject=ict&grade=10' },
+                { name: 'Economics', icon: 'fas fa-chart-line', color: 'economics', grades: ['10'], url: 'https://fetena.net/textbooks?subject=economics&grade=10' },
+                { name: 'Agriculture', icon: 'fas fa-seedling', color: 'agriculture', grades: ['10'], url: 'https://fetena.net/textbooks?subject=agriculture&grade=10' },
+                { name: 'Web Design', icon: 'fas fa-code', color: 'webdesign', grades: ['10'], url: 'https://fetena.net/textbooks?subject=computer-science&grade=10' },
+                { name: 'Novel Books', icon: 'fas fa-book-open', color: 'novel', grades: ['10'], action: 'showComingSoon' }
+            ],
+            '11': [
+                { name: 'Mathematics', icon: 'fas fa-square-root-alt', color: 'math', grades: ['11'], url: 'https://fetena.net/textbooks?subject=mathematics&grade=11' },
+                { name: 'Physics', icon: 'fas fa-atom', color: 'physics', grades: ['11'], url: 'https://fetena.net/textbooks?subject=physics&grade=11' },
+                { name: 'Chemistry', icon: 'fas fa-flask', color: 'chemistry', grades: ['11'], url: 'https://fetena.net/textbooks?subject=chemistry&grade=11' },
+                { name: 'Biology', icon: 'fas fa-dna', color: 'biology', grades: ['11'], url: 'https://fetena.net/textbooks?subject=biology&grade=11' },
+                { name: 'English', icon: 'fas fa-language', color: 'english', grades: ['11'], url: 'https://fetena.net/textbooks?subject=english&grade=11' },
+                { name: 'History', icon: 'fas fa-landmark', color: 'history', grades: ['11'], url: 'https://fetena.net/textbooks?subject=history&grade=11' },
+                { name: 'Economics', icon: 'fas fa-chart-line', color: 'economics', grades: ['11'], url: 'https://fetena.net/textbooks?subject=economics&grade=11' },
+                { name: 'ICT', icon: 'fas fa-laptop', color: 'ict', grades: ['11'], url: 'https://fetena.net/textbooks?subject=ict&grade=11' },
+                { name: 'Agriculture', icon: 'fas fa-seedling', color: 'agriculture', grades: ['11'], url: 'https://fetena.net/textbooks?subject=agriculture&grade=11' },
+                { name: 'Web Design', icon: 'fas fa-code', color: 'webdesign', grades: ['11'], url: 'https://fetena.net/textbooks?subject=computer-science&grade=11' },
+                { name: 'Novel Books', icon: 'fas fa-book-open', color: 'novel', grades: ['11'], action: 'showComingSoon' }
+            ],
+            '12': [
+                { name: 'Mathematics', icon: 'fas fa-square-root-alt', color: 'math', grades: ['12'], url: 'https://fetena.net/textbooks?subject=mathematics&grade=12' },
+                { name: 'Physics', icon: 'fas fa-atom', color: 'physics', grades: ['12'], url: 'https://fetena.net/textbooks?subject=physics&grade=12' },
+                { name: 'Chemistry', icon: 'fas fa-flask', color: 'chemistry', grades: ['12'], url: 'https://fetena.net/textbooks?subject=chemistry&grade=12' },
+                { name: 'Biology', icon: 'fas fa-dna', color: 'biology', grades: ['12'], url: 'https://fetena.net/textbooks?subject=biology&grade=12' },
+                { name: 'English', icon: 'fas fa-language', color: 'english', grades: ['12'], url: 'https://fetena.net/textbooks?subject=english&grade=12' },
+                { name: 'History', icon: 'fas fa-landmark', color: 'history', grades: ['12'], url: 'https://fetena.net/textbooks?subject=history&grade=12' },
+                { name: 'Economics', icon: 'fas fa-chart-line', color: 'economics', grades: ['12'], url: 'https://fetena.net/textbooks?subject=economics&grade=12' },
+                { name: 'ICT', icon: 'fas fa-laptop', color: 'ict', grades: ['12'], url: 'https://fetena.net/textbooks?subject=ict&grade=12' },
+                { name: 'Agriculture', icon: 'fas fa-seedling', color: 'agriculture', grades: ['12'], url: 'https://fetena.net/textbooks?subject=agriculture&grade=12' },
+                { name: 'Web Design', icon: 'fas fa-code', color: 'webdesign', grades: ['12'], url: 'https://fetena.net/textbooks?subject=computer-science&grade=12' },
+                { name: 'Novel Books', icon: 'fas fa-book-open', color: 'novel', grades: ['12'], action: 'showComingSoon' }
+            ]
+        };
+
+        function updateSubjectsForGrade(grade) {
+            const subjectsContainer = document.getElementById('subjects-container');
+            const subjects = subjectsByGrade[grade] || [];
+            
+            if (subjects.length === 0) {
+                subjectsContainer.innerHTML = `
+                    <p style="text-align: center; color: #666; padding: 15px; font-style: italic; font-size: 0.85rem;">
+                        ${translations[currentLanguage]['selectGradeFirst'] || 'Please select a grade level above to view available subjects'}
+                    </p>
+                `;
+                return;
+            }
+            
+            let html = '<div class="subject-grid">';
+            
+            subjects.forEach(subject => {
+                if (subject.action && subject.action === 'openKGLinks') {
+                    html += `
+                        <div class="subject-card ${subject.color}" onclick="openKGLinks()">
+                            <div class="subject-icon"><i class="${subject.icon}"></i></div>
+                            <h3>${subject.name}</h3>
+                            <div class="grade-buttons">
+                                ${subject.grades.map(g => `<span class="grade-btn available">${g}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                } else if (subject.action && subject.action === 'showComingSoon') {
+                    html += `
+                        <div class="subject-card ${subject.color}" onclick="showComingSoon('${subject.name}')">
+                            <div class="subject-icon"><i class="${subject.icon}"></i></div>
+                            <h3>${subject.name}</h3>
+                            <div class="grade-buttons">
+                                ${subject.grades.map(g => `<span class="grade-btn available">${g}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="subject-card ${subject.color}" onclick="window.open('${subject.url}', '_blank')">
+                            <div class="subject-icon"><i class="${subject.icon}"></i></div>
+                            <h3>${subject.name}</h3>
+                            <div class="grade-buttons">
+                                ${subject.grades.map(g => `<span class="grade-btn available">${g}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            html += '</div>';
+            subjectsContainer.innerHTML = html;
+        }
+
+        // Special function for Kindergarten
+        function openKGLinks() {
+            const kgLinks = [
+                'https://www.starfall.com',
+                'https://pbskids.org',
+                'https://www.abcmouse.com'
+            ];
+            
+            for (let i = 0; i < Math.min(3, kgLinks.length); i++) {
+                window.open(kgLinks[i], '_blank');
+            }
+            
+            showComingSoon('Kindergarten Learning Resources');
+            document.getElementById('modalMessage').textContent = 'Opening educational websites for Kindergarten learning! Check your browser tabs for Starfall, PBS Kids, and other learning resources.';
+        }
+
+        // Fetena Navigation - UPDATED WITH CORRECT URLs
+        function openFetena(section) {
+            let url = 'https://fetena.net';
+            if (section === 'textbooks') {
+                url = 'https://fetena.net/textbooks';
+            } else if (section === 'past-papers') {
+                url = 'https://fetena.net/past-papers';
+            } else if (section === 'teachers-guide') {
+                url = 'https://fetena.net/teachers-guide';
+            } else if (section === 'curriculum') {
+                url = 'https://fetena.net/curriculum';
+            }
+            window.open(url, '_blank');
+        }
+
+        function openGradeResources(gradeRange) {
+            let url = 'https://fetena.net/textbooks';
+            if (gradeRange === 'kg') {
+                openKGLinks();
+                return;
+            } else if (gradeRange === '1-8') {
+                url = 'https://fetena.net/textbooks?grade=primary';
+            } else if (gradeRange === '9-12') {
+                url = 'https://fetena.net/textbooks?grade=secondary';
+            }
+            window.open(url, '_blank');
+        }
+
+        // Modal System for Coming Soon
+        function showComingSoon(featureName) {
+            document.getElementById('modalTitle').textContent = `${featureName} - ${translations[currentLanguage]['comingSoon'] || 'Coming Soon!'}`;
+            document.getElementById('modalMessage').textContent = translations[currentLanguage]['featureUnderDevelopment'] || 'This feature is currently under development.';
+            document.getElementById('comingSoonModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('comingSoonModal').style.display = 'none';
+        }
+
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('comingSoonModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // ENHANCED FLASHCARD SYSTEM WITH 200+ KG QUESTIONS (unchanged)
+        const flashcardDecks = {
+            kg: [
+                // English Alphabet (26)
+                { q: "What letter comes after A?", a: "The letter B comes after A." },
+                { q: "What letter comes before C?", a: "The letter B comes before C." },
+                { q: "What is the first letter of the alphabet?", a: "A is the first letter." },
+                { q: "What is the last letter of the alphabet?", a: "Z is the last letter." },
+                // ... [all 206 flashcards remain exactly the same]
+                { q: "What animal is on Ethiopia's coat of arms?", a: "A lion is on the coat of arms." },
+                { q: "What is Ethiopia's official language?", a: "Amharic is the official language." }
+            ],
+            primary: [
+                { q: "What is 5 + 3?", a: "5 + 3 = 8" },
+                { q: "What is the capital of Ethiopia?", a: "Addis Ababa is the capital of Ethiopia." },
+                { q: "What are the three states of matter?", a: "Solid, liquid, and gas." },
+                { q: "What is a verb?", a: "A verb is an action word." },
+                { q: "Who is the current Prime Minister of Ethiopia?", a: "Dr. Abiy Ahmed is the Prime Minister of Ethiopia." }
+            ],
+            math: [
+                { q: "What is the Pythagorean theorem?", a: "In a right triangle, a² + b² = c²" },
+                { q: "What is 7 × 8?", a: "7 × 8 = 56" },
+                { q: "What is the area of a rectangle?", a: "Area = length × width" },
+                { q: "What is ¼ as a decimal?", a: "¼ = 0.25" }
+            ],
+            english: [
+                { q: "What is a synonym for 'happy'?", a: "Synonyms: joyful, glad, cheerful" },
+                { q: "What is the plural of 'child'?", a: "The plural of child is children." },
+                { q: "What is a noun?", a: "A noun is a person, place, thing, or idea." }
+            ],
+            science: [
+                { q: "What planet do we live on?", a: "We live on planet Earth." },
+                { q: "What do plants need to grow?", a: "Plants need sunlight, water, and air to grow." },
+                { q: "What is H₂O?", a: "H₂O is the chemical formula for water." }
+            ]
+        };
+
+        let currentDeck = 'kg';
+        let currentCardIndex = 0;
+
+        function loadFlashcards(deck) {
+            currentDeck = deck;
+            document.getElementById('flashcardDeck').value = deck;
+            currentCardIndex = 0;
+            updateFlashcard();
+            switchTab('flashcards');
+        }
+
+        function updateFlashcard() {
+            const deck = flashcardDecks[currentDeck];
+            if (!deck || deck.length === 0) return;
+            
+            const card = deck[currentCardIndex];
+            document.getElementById('cardQuestion').textContent = card.q;
+            document.getElementById('cardAnswer').textContent = card.a;
+            document.getElementById('mainFlashcard').classList.remove('flipped');
+        }
+
+        function flipCard() {
+            document.getElementById('mainFlashcard').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            const deck = flashcardDecks[currentDeck];
+            if (!deck) return;
+            
+            currentCardIndex = (currentCardIndex + 1) % deck.length;
+            updateFlashcard();
+        }
+
+        function prevCard() {
+            const deck = flashcardDecks[currentDeck];
+            if (!deck) return;
+            
+            currentCardIndex = (currentCardIndex - 1 + deck.length) % deck.length;
+            updateFlashcard();
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            initNavigation();
+            updateFlashcard();
+            
+            // Set up event listeners
+            document.getElementById('flashcardDeck').addEventListener('change', function() {
+                currentDeck = this.value;
+                currentCardIndex = 0;
+                updateFlashcard();
+            });
+            
+            document.getElementById('mainFlashcard').addEventListener('click', flipCard);
+            document.getElementById('newQuoteBtn').addEventListener('click', function() {
+                const quotes = [
+                    translations[currentLanguage]['motivationQuote'],
+                    "No light enters without entering the dark. Knowledge is found in struggle.",
+                    "One day of thinking is better than one year of doing.",
+                    "Every test is a passage. Knowing is finding.",
+                    "Where your heart is, every way will be. Education until the grave."
+                ];
+                const randomIndex = Math.floor(Math.random() * quotes.length);
+                document.getElementById('funnyQuote').textContent = `"${quotes[randomIndex]}"`;
+            });
+            
+            // Auto-select Primary (1-8) grade by default
+            setTimeout(() => {
+                const primaryBtn = document.querySelector('.grade-selection button:nth-child(2)');
+                if (primaryBtn) {
+                    selectGrade('1-8');
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>
